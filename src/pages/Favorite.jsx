@@ -1,8 +1,58 @@
+import { useContext } from "react"
+import { BookContext } from "../components/BooksProvider"
 
 function Favorite() {
+  const { favoriteBook, book } = useContext(BookContext)
+  const { books, getBooks } = book
+  const { favoriteBooks } = favoriteBook
+
+  console.table(favoriteBooks)
+  const markAsRead = (itemID) => {
+    getBooks(books.map(item => {
+      if (item.id === itemID) {
+        item.read = true
+      }
+      return item
+    }))
+  }
+
   return (
     <div className="favorite">
-      <h1>This is favorite page</h1>
+      <div className="title">
+        Favorite books
+      </div>
+
+      <div className="content">
+        <div className="book-list">
+          {
+            favoriteBooks.length === 0 ? (<div className="book-list">
+              <h2>
+                No Favorite Book
+              </h2>
+            </div>) : (
+              favoriteBooks.map((item, index) => {
+                return (
+                  <div key={index} className="book-card">
+                    <section className="book-image">
+                      <img width={"200px"} height={"300px"} src={`${item.image}`} alt={`${item.title}`} />
+                    </section>
+                    <section className="book-content">
+                      <strong>Title:</strong> {item.title}
+                      <br />
+                      <br />
+                      <strong>Author:</strong> {item.author}
+                      <br />
+                      <br />
+                      {item.read === false ? (<button onClick={() => markAsRead(item.id)}>Mark as read</button>) : (<button disabled>Already Read</button>)}
+                      <br />
+                    </section>
+                  </div>
+                )
+              })
+            )
+          }
+        </div>
+      </div>
     </div>
   )
 }
