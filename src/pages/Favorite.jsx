@@ -4,9 +4,8 @@ import { BookContext } from "../components/BooksProvider"
 function Favorite() {
   const { favoriteBook, book } = useContext(BookContext)
   const { books, getBooks } = book
-  const { favoriteBooks } = favoriteBook
+  const { favoriteBooks, setFavoriteBooks } = favoriteBook
 
-  console.table(favoriteBooks)
   const markAsRead = (itemID) => {
     getBooks(books.map(item => {
       if (item.id === itemID) {
@@ -14,6 +13,10 @@ function Favorite() {
       }
       return item
     }))
+  }
+
+  const removeAsFavorite = (itemID) => {
+    setFavoriteBooks(favoriteBooks.filter(item => item.id !== itemID))
   }
 
   return (
@@ -45,6 +48,7 @@ function Favorite() {
                       <br />
                       {item.read === false ? (<button onClick={() => markAsRead(item.id)}>Mark as read</button>) : (<button disabled>Already Read</button>)}
                       <br />
+                      <button onClick={() => removeAsFavorite(item.id)}>Remove As Favorite</button>
                     </section>
                   </div>
                 )
