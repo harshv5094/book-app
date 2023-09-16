@@ -24,3 +24,8 @@
   padding: 1rem;
   outline: auto;
 }
+
+button{
+  padding: 8px 20px;
+  margin: 5px;
+}
