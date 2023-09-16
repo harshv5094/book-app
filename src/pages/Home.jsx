@@ -3,9 +3,18 @@ import { BookContext } from "../components/BooksProvider"
 
 function Home() {
   const { book } = useContext(BookContext)
-  const { books } = book
+  const { books, getBooks } = book
 
   console.log(books)
+
+  const markAsRead = (itemID) => {
+    getBooks(books.map(item => {
+      if (item.id === itemID) {
+        item.read = true
+      }
+      return item
+    }))
+  }
 
   return (
     <div className="home">
@@ -28,7 +37,7 @@ function Home() {
                     <strong>Author:</strong> {item.author}
                     <br />
                     <br />
-                    {item.read === false ? (<button>Mark as read</button>) : (<button disabled>Already Read</button>)}
+                    {item.read === false ? (<button onClick={() => markAsRead(item.id)}>Mark as read</button>) : (<button disabled>Already Read</button>)}
                   </div>
                 </div>
               )
