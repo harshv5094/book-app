@@ -28,7 +28,7 @@ function Home() {
                     <strong>Author:</strong> {item.author}
                     <br />
                     <br />
-                    {item.read === true ? (<button>Mark as read</button>) : (<button disabled>Already Read</button>)}
+                    {item.read === false ? (<button>Mark as read</button>) : (<button disabled>Already Read</button>)}
                   </div>
                 </div>
               )
