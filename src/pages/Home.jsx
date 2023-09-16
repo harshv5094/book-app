@@ -1,11 +1,12 @@
 import { useContext } from "react"
 import { BookContext } from "../components/BooksProvider"
+import { NavLink } from "react-router-dom"
 // import { NavLink } from "react-router-dom"
 
 function Home() {
   const { book, favoriteBook } = useContext(BookContext)
   const { books, getBooks } = book
-  const { setFavoriteBooks } = favoriteBook
+  const { favoriteBooks, setFavoriteBooks } = favoriteBook
 
   const addToFavorite = (itemID) => {
     const bookToAdd = books.find(item => item.id === itemID)
@@ -18,6 +19,11 @@ function Home() {
         return [bookToAdd]
       }
     })
+  }
+
+  const fetchBookID = (itemID) => {
+    const searchItem = favoriteBooks.find(book => book.id === itemID)
+    return searchItem
   }
 
   const markAsRead = (itemID) => {
@@ -53,7 +59,13 @@ function Home() {
                     <br />
                     {item.read === false ? (<button onClick={() => markAsRead(item.id)}>Mark as read</button>) : (<button disabled>Already Read</button>)}
                     <br />
-                    <button onClick={() => addToFavorite(item.id)}>Add To Favorite</button>
+
+                    {
+                      fetchBookID(item.id) === item ? (<NavLink to="/favorite">
+                        <button>Go To Favorite</button>
+                      </NavLink>) : (<button onClick={() => addToFavorite(item.id)}>Add To Favorite</button>)
+                    }
+
                   </section>
                 </div>
               )
