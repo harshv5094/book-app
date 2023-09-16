@@ -1,11 +1,30 @@
 import { useContext } from "react"
 import { BookContext } from "../components/BooksProvider"
+import { NavLink } from "react-router-dom"
+// import { NavLink } from "react-router-dom"
 
 function Home() {
-  const { book } = useContext(BookContext)
+  const { book, favoriteBook } = useContext(BookContext)
   const { books, getBooks } = book
+  const { favoriteBooks, setFavoriteBooks } = favoriteBook
 
-  console.log(books)
+  const addToFavorite = (itemID) => {
+    const bookToAdd = books.find(item => item.id === itemID)
+
+    setFavoriteBooks((previousBooks) => {
+      if (previousBooks.length !== 0) {
+        return [...previousBooks, bookToAdd]
+      }
+      else {
+        return [bookToAdd]
+      }
+    })
+  }
+
+  const fetchBookID = (itemID) => {
+    const searchItem = favoriteBooks.find(book => book.id === itemID)
+    return searchItem
+  }
 
   const markAsRead = (itemID) => {
     getBooks(books.map(item => {
@@ -16,13 +35,14 @@ function Home() {
     }))
   }
 
+
   return (
     <div className="home">
       <div className="title">
         All Books
       </div>
       <div className="content">
-        <div className="book-list">
+        <section className="book-list">
           {
             books.map((item, index) => {
               return (
@@ -30,7 +50,7 @@ function Home() {
                   <section className="book-image">
                     <img width={"200px"} height={"300px"} src={`${item.image}`} alt={`${item.title}`} />
                   </section>
-                  <div className="book-content">
+                  <section className="book-content">
                     <strong>Title:</strong> {item.title}
                     <br />
                     <br />
@@ -38,12 +58,20 @@ function Home() {
                     <br />
                     <br />
                     {item.read === false ? (<button onClick={() => markAsRead(item.id)}>Mark as read</button>) : (<button disabled>Already Read</button>)}
-                  </div>
+                    <br />
+
+                    {
+                      fetchBookID(item.id) === item ? (<NavLink to="/favorite">
+                        <button>Go To Favorite</button>
+                      </NavLink>) : (<button onClick={() => addToFavorite(item.id)}>Add To Favorite</button>)
+                    }
+
+                  </section>
                 </div>
               )
             })
           }
-        </div>
+        </section>
       </div>
     </div>
   )
